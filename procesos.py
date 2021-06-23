@@ -8,6 +8,7 @@ db = Semaphore(1)
 nLectores = Value("i", 0)
 
 
+
 def leerBD():
     print("Lector Leyendo...\n")
     sleep(randint(5, 10))
