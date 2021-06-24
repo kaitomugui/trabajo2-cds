@@ -9,19 +9,18 @@ nLectores = Value("i", 0)
 
 
 
-def leerBD():
-    print("Lector Leyendo...\n")
-    sleep(randint(5, 10))
+def leerBD(i):
+    print("Lector " + str(i) + " Leyendo...\n")
+    sleep(randint(3,6))
 
 
-def pensarQueLeer():
-    print("Lector Pensando que Leer...\n")
+def pensarQueLeer(i):
+    print("Lector " + str(i) + "  Pensando que Leer...\n")
     sleep(randint(3, 5))
 
 
-def lector(can, bd, nLect):
+def lector(can, bd, nLect, i):
     while True:
-        pensarQueLeer()
         can.acquire()
         nLect.value += 1
 
@@ -30,7 +29,7 @@ def lector(can, bd, nLect):
 
         can.release()
 
-        leerBD()
+        leerBD(i)
 
         can.acquire()
         nLect.value -= 1
@@ -39,25 +38,26 @@ def lector(can, bd, nLect):
             bd.release()
 
         can.release()
+        sleep(5)
 
 
 ##################
-def pensarQueEscribir():
-    print("Escritor Pensando que Escribir...\n")
+def pensarQueEscribir(i):
+    print("Escritor " + str(i) + " Pensando que Escribir...\n")
     sleep(randint(3, 5))
 
 
-def escribir():
-    print("Escritor Escribiendo...\n")
-    sleep(randint(20, 30))
+def escribir(i):
+    print("Escritor " + str(i) + " Escribiendo...\n")
+    sleep(randint(5,10))
 
 
-def escritor(bd):
+def escritor(bd, i):
     while True:
-        pensarQueEscribir()
+        pensarQueEscribir(i)
 
         bd.acquire()
-        escribir()
+        escribir(i)
         bd.release()
 
 
@@ -66,17 +66,18 @@ if __name__ == "__main__":
     # Crear Lectores
     listaLectores = []
     for i in range(0, 10):
-        l = Process(target=lector, args=(candado, db, nLectores,))
+        l = Process(target=lector, args=(candado, db, nLectores, i, ))
         l.start()
+        print("Proceso ID: " + str(l.pid) + " Lector numero: " + str(i))
 
         listaLectores.append(l)
 
     # Crear Escritores
     listaEscritores = []
     for i in range(0, 10):
-        esc = Process(target=escritor, args=(db,))
+        esc = Process(target=escritor, args=(db, i, ))
         esc.start()
-
+        print("Proceso ID: " + str(esc.pid) + " Escritor numero: " + str(i))
         listaEscritores.append(esc)
 
     # Esperar Lectores
