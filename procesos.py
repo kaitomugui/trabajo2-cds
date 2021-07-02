@@ -1,6 +1,10 @@
 from multiprocessing import Process, Lock, Semaphore, Value
 from time import sleep
-from random import randint
+import time
+
+
+
+inicio = time.time()
 
 candado = Lock()
 db = Semaphore(1)
@@ -12,6 +16,10 @@ nLectores = Value("i", 0)
 def leerBD(i):
     print("Lector " + str(i) + " Leyendo...\n")
     sleep(3)
+
+def usarBasedeDatos(i):
+    print("Lector " + str(i) + " Pensando que escribir\n")
+    sleep(4)
 
 def lector(can, bd, nLect, i):
     estado = True
@@ -27,13 +35,14 @@ def lector(can, bd, nLect, i):
         leerBD(i)
 
         can.acquire()
+
         nLect.value -= 1
 
         if nLect.value == 0:
             bd.release()
 
         can.release()
-        sleep(5)
+        usarBasedeDatos(i)
         estado = False
 
 
@@ -85,3 +94,7 @@ if __name__ == "__main__":
     # Crear Escritores
     for esc in listaEscritores:
         esc.join()
+
+    fin = time.time()
+    print(fin - inicio)
+
