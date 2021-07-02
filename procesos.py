@@ -11,16 +11,11 @@ nLectores = Value("i", 0)
 
 def leerBD(i):
     print("Lector " + str(i) + " Leyendo...\n")
-    sleep(randint(3,6))
-
-
-def pensarQueLeer(i):
-    print("Lector " + str(i) + "  Pensando que Leer...\n")
-    sleep(randint(3, 5))
-
+    sleep(3)
 
 def lector(can, bd, nLect, i):
-    while True:
+    estado = True
+    while (estado):
         can.acquire()
         nLect.value += 1
 
@@ -39,33 +34,36 @@ def lector(can, bd, nLect, i):
 
         can.release()
         sleep(5)
+        estado = False
 
 
 ##################
 def pensarQueEscribir(i):
     print("Escritor " + str(i) + " Pensando que Escribir...\n")
-    sleep(randint(3, 5))
+    sleep(3)
 
 
 def escribir(i):
     print("Escritor " + str(i) + " Escribiendo...\n")
-    sleep(randint(5,10))
+    sleep(5)
 
 
 def escritor(bd, i):
-    while True:
+    estado = True
+    while (estado):
         pensarQueEscribir(i)
 
         bd.acquire()
         escribir(i)
         bd.release()
+        estado = False
 
 
 ###################################3
 if __name__ == "__main__":
     # Crear Lectores
     listaLectores = []
-    for i in range(0, 10):
+    for i in range(0, 3):
         l = Process(target=lector, args=(candado, db, nLectores, i, ))
         l.start()
         print("Proceso ID: " + str(l.pid) + " Lector numero: " + str(i))
@@ -74,7 +72,7 @@ if __name__ == "__main__":
 
     # Crear Escritores
     listaEscritores = []
-    for i in range(0, 10):
+    for i in range(0, 3):
         esc = Process(target=escritor, args=(db, i, ))
         esc.start()
         print("Proceso ID: " + str(esc.pid) + " Escritor numero: " + str(i))
