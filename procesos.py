@@ -17,7 +17,7 @@ def leerBD(i):
     sleep(3)
 
 def usarBasedeDatos(i):
-    print("Lector " + str(i) + " Pensando que escribir\n")
+    print("Lector " + str(i) + " Usando Lectura\n")
     sleep(4)
 
 def lector(can, bd, nLect, i):
