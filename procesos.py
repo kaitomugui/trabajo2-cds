@@ -65,8 +65,7 @@ def escritor(bd, i):
         escribir(i)
         bd.release()
         estado = False
-        fin = time.time()
-        print(fin - inicio)
+
 
 ###################################3
 if __name__ == "__main__":
@@ -95,5 +94,6 @@ if __name__ == "__main__":
     for e in listaEscritores:
         e.join()
 
-
+    fin = time.time()
+    print(fin - inicio)
 
