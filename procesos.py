@@ -12,7 +12,6 @@ db = Semaphore(1)
 nLectores = Value("i", 0)
 
 
-
 def leerBD(i):
     print("Lector " + str(i) + " Leyendo...\n")
     sleep(3)
@@ -66,7 +65,8 @@ def escritor(bd, i):
         escribir(i)
         bd.release()
         estado = False
-
+        fin = time.time()
+        print(fin - inicio)
 
 ###################################3
 if __name__ == "__main__":
@@ -91,10 +91,9 @@ if __name__ == "__main__":
     for l in listaLectores:
         l.join()
 
-    # Crear Escritores
-    for esc in listaEscritores:
-        esc.join()
+    # Esperar escritores
+    for e in listaEscritores:
+        e.join()
 
-    fin = time.time()
-    print(fin - inicio)
+
 
